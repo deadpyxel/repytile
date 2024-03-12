@@ -1,4 +1,5 @@
 import pytest
+from repytile.exceptions import InvalidElementType
 from repytile.inline_elements import TextNode
 
 
@@ -18,16 +19,39 @@ def test_textnode_is_created_with_url() -> None:
     assert text_node.url == "https://www.example.com"
 
 
+def test_creating_textnode_without_a_type_raises_exception() -> None:
+
+    with pytest.raises(InvalidElementType):
+        TextNode(text="text", text_type=None, url="https://www.example.com")
+
+
 @pytest.mark.parametrize(
     "text_nodes,expected",
     [
         pytest.param(
-            (TextNode("text", "type"), TextNode("text", "type")), True, id="both_equal"
+            (TextNode("text", "type"), TextNode("text", "type")),
+            True,
+            id="both_equal_no_url",
         ),
         pytest.param(
             (TextNode("text", "type"), TextNode("text1", "type")),
             False,
-            id="both_different",
+            id="different_text_no_url",
+        ),
+        pytest.param(
+            (TextNode("text", "type", "url"), TextNode("text", "type", "url")),
+            True,
+            id="both_equal_with_url",
+        ),
+        pytest.param(
+            (TextNode("text", "type"), TextNode("text", "type1")),
+            False,
+            id="different_type_no_url",
+        ),
+        pytest.param(
+            (TextNode("text", "type", "url"), TextNode("text", "type", "urL")),
+            False,
+            id="different_url",
         ),
     ],
 )
