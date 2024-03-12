@@ -50,3 +50,10 @@ def test_htmlnode_repr_follows_expected_format(
     html_node: HTMLNode, expected: str
 ) -> None:
     assert str(html_node) == expected
+
+
+def test_to_html_method_raises_exception_when_not_a_child_class() -> None:
+    html_node = HTMLNode()
+
+    with pytest.raises(NotImplementedError):
+        html_node.to_html()
