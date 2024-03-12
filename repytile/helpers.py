@@ -3,7 +3,13 @@ from repytile.exceptions import InvalidElementType
 from repytile.inline_elements import TextNode
 
 
-ALLOWED_TYPES = ("text", "bold", "italic", "code", "link", "image")
+TAG_MAPPING = {
+    "bold": "b",
+    "italic": "i",
+    "code": "code",
+    "link": "a",
+    "image": "img",
+}
 
 
 def text_node_to_html_node(tn: TextNode) -> LeafNode:
@@ -32,22 +38,14 @@ def text_node_to_html_node(tn: TextNode) -> LeafNode:
     - "image": <img> tag with src and alt properties
     """
 
-    if tn.text_type not in ALLOWED_TYPES:
+    if tn.text_type not in TAG_MAPPING and tn.text_type != "text":
         raise InvalidElementType(
             f"The type of TextNode {tn.text_type} is not allowed for conversion"
         )
     if tn.text_type == "text":
         return LeafNode(value=tn.text)
 
-    tag_mapping = {
-        "bold": "b",
-        "italic": "i",
-        "code": "code",
-        "link": "a",
-        "image": "img",
-    }
-
-    tag = tag_mapping[tn.text_type]
+    tag = TAG_MAPPING[tn.text_type]
     props = {}
     if tn.text_type == "link":
         props["href"] = tn.url
