@@ -55,3 +55,20 @@ class HTMLNode:
 
     def __repr__(self) -> str:
         return f"HTMLNode(tag={self.tag}, value={self.value}, children={self.children}, props={self.props})"
+
+
+class LeafNode(HTMLNode):
+    """
+    LeafNodes represent HTML elements without any children
+    """
+
+    def to_html(self) -> str:
+        """
+        Converts the LeafNode object to its HTML representation.
+
+        Returns:
+            str: The HTML representation of the LeafNode object.
+        """
+        html_attrs = self.props_to_html()
+        sp = " " if html_attrs else ""
+        return f"<{self.tag}{sp}{html_attrs}>{self.value}</{self.tag}>"

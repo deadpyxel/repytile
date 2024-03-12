@@ -1,6 +1,6 @@
 import pytest
 
-from repytile.block_elements import HTMLNode
+from repytile.block_elements import HTMLNode, LeafNode
 
 
 def test_convertion_from_props_to_html_matches_expectation() -> None:
@@ -57,3 +57,37 @@ def test_to_html_method_raises_exception_when_not_a_child_class() -> None:
 
     with pytest.raises(NotImplementedError):
         html_node.to_html()
+
+
+@pytest.mark.parametrize(
+    "leaf_node,expected_html",
+    [
+        pytest.param(
+            LeafNode(tag="p", value="Hello"), "<p>Hello</p>", id="simple_p_tag"
+        ),
+        pytest.param(
+            LeafNode(tag="div", value="World"), "<div>World</div>", id="simple_div_tag"
+        ),
+    ],
+)
+def test_leafnode_without_props_can_generates_valid_html(
+    leaf_node: LeafNode, expected_html: str
+) -> None:
+
+    assert leaf_node.to_html() == expected_html
+
+
+def test_leafnode_with_props_can_generates_valid_html() -> None:
+    leaf_node = LeafNode(
+        tag="a", value="link", props={"href": "https://www.example.com"}
+    )
+    expected_html = '<a href="https://www.example.com">link</a>'
+
+    assert leaf_node.to_html() == expected_html
+
+
+def test_leafnode_with_empty_props_can_generates_valid_html() -> None:
+    leaf_node = LeafNode(tag="svg", value="<circle />")
+    expected_html = "<svg><circle /></svg>"
+
+    assert leaf_node.to_html() == expected_html
