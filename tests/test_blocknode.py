@@ -1,6 +1,6 @@
 import pytest
 
-from repytile.block_elements import HTMLNode, LeafNode
+from repytile.block_elements import HTMLNode, LeafNode, ParentNode
 
 
 def test_convertion_from_props_to_html_matches_expectation() -> None:
@@ -98,3 +98,52 @@ def test_leafnode_with_empty_props_can_generates_valid_html() -> None:
     expected_html = "<svg><circle /></svg>"
 
     assert leaf_node.to_html() == expected_html
+
+
+def test_parent_node_cannot_generate_html_without_tag() -> None:
+    parent_node = ParentNode()
+
+    with pytest.raises(
+        ValueError, match="ParentNode instances should have a tag value"
+    ):
+        parent_node.to_html()
+
+
+def test_parent_node_cannot_generate_html_without_children() -> None:
+    parent_node = ParentNode(tag="p")
+
+    with pytest.raises(
+        ValueError, match="ParentNode instances should have at least one children"
+    ):
+        parent_node.to_html()
+
+
+def test_parent_node_with_leaf_nodes_generates_valid_html() -> None:
+    node = ParentNode(
+        tag="p",
+        children=[
+            LeafNode("b", "bold"),
+            LeafNode(None, "normal"),
+            LeafNode("i", "italic"),
+            LeafNode(None, "normal"),
+        ],
+    )
+
+    assert node.to_html() == "<p><b>bold</b>normal<i>italic</i>normal</p>"
+
+
+def test_nested_parent_nodes_generates_valid_html() -> None:
+    node = ParentNode(
+        tag="div",
+        children=[
+            ParentNode(
+                tag="p",
+                children=[
+                    LeafNode(tag="b", value="bold"),
+                    LeafNode(tag=None, value="normal"),
+                ],
+            )
+        ],
+    )
+
+    assert node.to_html() == "<div><p><b>bold</b>normal</p></div>"

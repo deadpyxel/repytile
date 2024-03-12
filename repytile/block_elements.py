@@ -79,3 +79,32 @@ class LeafNode(HTMLNode):
         html_attrs = self.props_to_html()
         sp = " " if html_attrs else ""
         return f"<{self.tag}{sp}{html_attrs}>{self.value}</{self.tag}>"
+
+
+class ParentNode(HTMLNode):
+    """
+    ParentNode represents HTML elements that have at least one children. It is assumed it has no value.
+    """
+
+    def to_html(self) -> str:
+        """
+        Converts the parent node and its children to an HTML string.
+
+        Returns:
+            str: The HTML representation of the parent node and its children.
+
+        Raises:
+            ValueError: If the parent node does not have a tag value or if it does not have any children.
+        """
+        if not self.tag:
+            raise ValueError("ParentNode instances should have a tag value")
+
+        if not self.children:
+            raise ValueError("ParentNode instances should have at least one children")
+        html_attrs = self.props_to_html()
+        sp = " " if html_attrs else ""
+        # For each child nod, generate the HTML representation
+        children_html_repr = [child.to_html() for child in self.children]
+        # Concats all children HTML representation into a single string
+        children_html = "".join(children_html_repr)
+        return f"<{self.tag}{sp}{html_attrs}>{children_html}</{self.tag}>"
