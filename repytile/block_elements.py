@@ -15,10 +15,14 @@ class HTMLNode:
         Initialize an HTMLNode object with the specified tag, value, children, and properties.
 
         Parameters:
-            tag (str): The HTML tag for the node. If not provided, the node will render as raw text.
-            value (str): The value/content of the node. If not provided, the node will be assumed to have children.
-            children (list[HTMLNode]): A list of child HTMLNode objects. If not provided, the node will be assumed to have a value.
-            props (dict[str, str]): A dictionary of properties/attributes for the node. If not provided, the node will have no attributes.
+            tag (str): The HTML tag for the node.
+                If not provided, the node will render as raw text.
+            value (str): The value/content of the node.
+                If not provided, the node will be assumed to have children.
+            children (list[HTMLNode]): A list of child HTMLNode objects.
+                If not provided, the node will be assumed to have a value.
+            props (dict[str, str]): A dictionary of properties/attributes for the node.
+                If not provided, the node will have no attributes.
 
         """
         self.tag = tag
@@ -33,7 +37,8 @@ class HTMLNode:
         """
         Converts the properties of an object into HTML attribute format.
 
-        This method takes the properties of an object stored in a dictionary format and converts them into a string of HTML attributes.
+        This method takes the properties of an object stored in a dictionary format
+        and converts them into a string of HTML attributes.
         Each key-value pair in the dictionary is converted into a string in the format 'key="value"'.
         If the object has no properties, an empty string is returned.
 
@@ -59,7 +64,7 @@ class HTMLNode:
 
 class LeafNode(HTMLNode):
     """
-    LeafNodes represent HTML elements without any children
+    LeafNode represents HTML elements without any children
     """
 
     def to_html(self) -> str:
