@@ -1,4 +1,5 @@
 import pytest
+
 from repytile.exceptions import InvalidElementType
 from repytile.inline_elements import TextNode
 
@@ -52,6 +53,11 @@ def test_creating_textnode_without_a_type_raises_exception() -> None:
             (TextNode("text", "type", "url"), TextNode("text", "type", "urL")),
             False,
             id="different_url",
+        ),
+        pytest.param(
+            (TextNode("text", "type", "url"), {}),
+            False,
+            id="different_object_types",
         ),
     ],
 )
