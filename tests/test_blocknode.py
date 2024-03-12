@@ -77,6 +77,13 @@ def test_leafnode_without_props_can_generates_valid_html(
     assert leaf_node.to_html() == expected_html
 
 
+def test_leafnode_without_tag_generates_raw_text() -> None:
+    node_value = "raw text"
+    leaf_node = LeafNode(value=node_value)
+
+    assert leaf_node.to_html() == node_value
+
+
 def test_leafnode_with_props_can_generates_valid_html() -> None:
     leaf_node = LeafNode(
         tag="a", value="link", props={"href": "https://www.example.com"}

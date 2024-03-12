@@ -69,6 +69,8 @@ class LeafNode(HTMLNode):
         Returns:
             str: The HTML representation of the LeafNode object.
         """
+        if not self.tag:
+            return f"{self.value}"
         html_attrs = self.props_to_html()
         sp = " " if html_attrs else ""
         return f"<{self.tag}{sp}{html_attrs}>{self.value}</{self.tag}>"
